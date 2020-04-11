@@ -4,8 +4,8 @@
   "description": "쇼핑몰",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js",
-    "dev": "npx nodemon app.js"
+    "start": "nodemon -e js,html app.js",
+    "dev": "npx nodemon -e js,html app.js"
   },
   "keywords": [
     "쇼핑몰"
@@ -13,7 +13,12 @@
   "author": "김광민",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "nunjucks": "^3.2.1"
+    "moment": "^2.24.0",
+    "morgan": "^1.10.0",
+    "mysql2": "^2.1.0",
+    "nunjucks": "^3.2.1",
+    "sequelize": "^4.42.0"
   }
 }
