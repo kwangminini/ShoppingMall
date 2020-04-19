@@ -1,6 +1,28 @@
 const express = require('express');
 const router = express.Router();
 const models = require('../models');
+// csrf 셋팅
+const csrf = require('csurf');
+const csrfProtection = csrf({ cookie: true });
+
+//이미지 저장되는 위치 설정
+const path = require('path');
+const uploadDir = path.join( __dirname , '../uploads' ); // 루트의 uploads위치에 저장한다.
+const fs = require('fs'); //삭제할때 사용
+
+//multer 셋팅
+const multer = require('multer');
+const storage = multer.diskStorage({
+    destination : (req, file, callback) =>{//이미지가 저장되는 도착지 지정
+        callback(null, uploadDir);
+    },
+    filename : (req, file, callback)=>{ //products-날짜.jpg(png) 저장
+        callback(null,'products-'+Date.now()+'.'+file.mimetype.split('/')[1]); //mimetype : 'image/jpeg' 으로 나오기때문에 jpeg을 사용하려고 split
+    }
+});
+const upload = multer ({storage : storage});
+
+
 router.get('/', function(req,res){
     res.send('admin url!!!');
 });
@@ -30,11 +52,13 @@ router.get( '/products' ,testMiddleware,testMiddleware2, async( _ ,res)=>{ //mid
 //         res.render('admin/products.html',{products : products});
 //     });
 // })
-router.get('/products/write',( _ ,res) => {
-    res.render('admin/form.html');
+router.get('/products/write', csrfProtection,( req ,res) => {
+    res.render('admin/form.html',{ csrfToken : req.csrfToken() });
 });
 
-router.post('/products/write', async(req,res) =>{
+router.post('/products/write', upload.single('thumbnail'), csrfProtection, async(req,res) =>{
+    //console.log(req.file);
+    req.body.thumbnail = (req.file) ? req.file.filename : "";
     await models.Products.create(req.body
         //{
         // name : req.body.name,
@@ -61,20 +85,27 @@ router.get('/products/detail/:id' , async(req, res)=>{  //에러 처리는 try c
         
     }
 });
-router.get('/products/edit/:id' , async(req, res) => {
+router.get('/products/edit/:id' , csrfProtection,async(req, res) => {
     //기존에 폼에 value안에 값을 셋팅하기 위해 만든다.
     try{
         const product = await models.Products.findByPk(req.params.id);
-        res.render('admin/form.html', { product : product });
+        res.render('admin/form.html', { product : product ,csrfToken : req.csrfToken()});
     }catch(e){
 
     }
 });
 
-router.post('/products/edit/:id' , async(req, res) => {
+router.post('/products/edit/:id' , upload.single('thumbnail'),csrfProtection, async(req, res) => {
  
     try{
- 
+        // 이전에 저장되어있는 파일명을 받아오기 위함
+        const product = await models.Products.findByPk(req.params.id);
+        
+        if(req.file && product.thumbnail) {  //요청중에 파일이 존재 할시 이전이미지 지운다.
+            fs.unlinkSync( uploadDir + '/' + product.thumbnail );
+        }
+        //파일요청이면 파일명을 담고 아니면 이전 db에서 가져온다
+        req.body.thumbnail = (req.file) ? req.file.filename : product.thumbnail;
         await models.Products.update(
             req.body , 
             { 
@@ -82,7 +113,6 @@ router.post('/products/edit/:id' , async(req, res) => {
             }
         );
         res.redirect('/admin/products/detail/' + req.params.id );
- 
     }catch(e){
  
     }

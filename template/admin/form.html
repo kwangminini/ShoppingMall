@@ -2,12 +2,22 @@
 {% extends "layout/base.html" %}
  
 {% block content -%}
-    <form action="" method="post"> <!-- action에 변화하는 추가 url을 작성할 수 있다-->
+    <form action="" method="post" enctype="multipart/form-data"><!-- action에 변화하는 추가 url을 작성할 수 있다-->
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" /> <!--여기 생략하면 토큰방어로 안됨-->
         <table class="table table-bordered">
             <tr>
                 <th>제품명</th>
                 <td><input type="text" name="name" class="form-control"
                 value = "{{product.name}}"/></td>
+            </tr>
+            <tr>
+                <th>섬네일</th>
+                <td>
+                    <input type="file" name="thumbnail" />
+                    {% if product.thumbnail %}
+                        <a href="/uploads/{{ product.thumbnail }}" target="_blank">업로드 이미지 보기</a>
+                    {% endif %}
+                </td>
             </tr>
             <tr>
                 <th>가격</th>

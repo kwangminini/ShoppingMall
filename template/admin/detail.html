@@ -10,7 +10,11 @@
             <div style="padding-bottom: 10px">
                 작성일 : {{product.dateFormat(product.createdAt)}}
             </div>
-
+            {% if product.thumbnail %}
+                <p>
+                    <img src="/uploads/{{ product.thumbnail }}" style="max-width: 100%"/>
+                </p>
+            {% endif %}
             {{product.description}}
             <hr />
              <ul>
