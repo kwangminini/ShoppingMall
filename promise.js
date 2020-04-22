@@ -21,7 +21,7 @@ var p1 = new Promise(
         setTimeout(
             function() {
                 //프라미스 이행 될때 실행할 부분을 resolve로 적습니다. 변수도 저장 가능
-                resolve({ p1 : "^_^" });
+                resolve({ p1 : "^_^" , a:"a"});
             }, 500 );
     }
 );
@@ -49,7 +49,7 @@ var p2 = new Promise(
 // );
 
 // p1.then( result => {
-//     console.log("p1 = " + result.p1);
+//     console.log("p1 = " + result.p1+" "+result.a);
 //     return p2;
 // }).then( result =>{
 //     console.log("p2 = " + result.p2);
@@ -57,7 +57,7 @@ var p2 = new Promise(
 
 Promise.all([p1,p2]).then( (result) =>{ //p1, p2객체의 변수가 다르면?
     console.log(result);
-    console.log( "p1 = " + result[0].p1);
+    console.log( "p1 = " + result[0].p1+result[0]);
     console.log( "p2 = " + result[1].p2);
 });
 

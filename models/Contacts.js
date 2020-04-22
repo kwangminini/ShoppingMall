@@ -7,6 +7,11 @@ module.exports = function(sequelize, DataTypes){
         price : {type : DataTypes.INTEGER},
         description : {type : DataTypes.TEXT}
     });
+
+    Contacts.associate =(models)=>{
+        Contacts.hasMany(models.ContactsComment,{as:'Comment',foreignKey:'contact_id',sourceKey:'id', onDelete:'CASCADE'});
+
+    }
     Contacts.prototype.dateFormat = (date) =>(
         moment(date).format('YYYY-MM-DD')
     );
