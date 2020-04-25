@@ -13,6 +13,7 @@
                     <fieldset>
                         <div class="form-group">
                             <input class="form-control" placeholder="ID" name="username" type="text" autofocus="" required>
+                            <button id="checkId"class="btn btn-primary">중복체크</button>
                         </div>
                         <div class="form-group">
                             <input class="form-control" placeholder="Password" name="password" type="password" value="" required>
@@ -33,6 +34,23 @@
 </div>
 <script type="text/javascript">
 $(document).ready(function() {
+    $('#checkId').on('click',function(){ //중복체크 이벤트
+        var $idInput = $('input[name=username]').val();
+        console.log($idInput);
+        if($idInput){
+            console.log("통과");
+            $.ajax({
+                url:'/accounts/ajax/check',
+                type:'POST',
+                data: {
+                    'username':$idInput
+                }
+            }).done((req)=>{
+                alert('존재하는 아이디입니다.');
+                $('input[name=username]').val('');
+            });
+        }
+    });
     $('#join_form').submit(function(){
 
         var $passwordInput = $('#join_form input[name=password]');

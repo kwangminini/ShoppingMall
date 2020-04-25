@@ -1,3 +1,12 @@
+// const livereload = require('livereload');
+// const livereloadMiddle = require('connect-livereload');
+// // 라이브 서버 설정
+// const liveServer = livereload.createServer({
+//     // 변경시 다시 로드할 파일 확장자들 설정
+//     exts: ['html', 'css', 'ejs'],
+//     debug: true
+// });
+//liveServer.watch(__dirname);
 const express = require('express');
 
 const nunjucks = require('nunjucks');
@@ -50,6 +59,8 @@ app.get('/',function(req,res){
 app.use('/admin', admin);
 app.use('/contacts', contacts);
 app.use('/accounts',accounts);
+//app.use(livereloadMiddle());
+
 // app.get('/admin',function(req,res){
 //     res.send('admin url 입니다.');
 // });
