@@ -10,11 +10,22 @@
             <div style="padding-bottom: 10px">
                 작성일 : {{contact.dateFormat(contact.createdAt)}}
             </div>
-
+            {% if contact.thumbnail %}
+                <p>
+                    <img src="/uploads/{{ contact.thumbnail }}" style="max-width: 100%"/>
+                </p>
+            {% endif %}
             {{contact.description}}
             <ul>
                 {% for comment in contact.Comment%}
-                    <li>{{comment.content}}</li>
+                    <li>
+                    {{comment.content}}
+                    (
+                        <a href="/contacts/delete/{{contact.id}}/{{comment.id}}" onclick="return confirm('삭제하시겠습니까?')">
+                            삭제
+                        </a>
+                    )
+                    </li>
                 {% endfor%}
             </ul>
             <hr />
