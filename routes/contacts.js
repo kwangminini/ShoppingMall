@@ -7,6 +7,8 @@ const csrfProtection = csrf({cookie:true});
 const path = require('path');
 const uploadDir = path.join(__dirname,'../uploads');
 const fs = require('fs');   //fileSystem 
+const sharp = require('sharp');
+
 
 //multer 셋팅
 const multer = require('multer');
@@ -32,6 +34,7 @@ router.get('/write', csrfProtection,(req,res)=>{
 });
 router.post('/write', upload.single('thumbnail') ,csrfProtection,async(req,res)=>{
     try{
+        
         req.body.thumbnail = (req.file) ? req.file.filename : "";
         await models.Contacts.create( req.body );
         res.redirect('/contacts');
@@ -79,8 +82,9 @@ router.post('/edit/:id',upload.single('thumbnail'),csrfProtection,async(req,res)
     if(req.file && contact.thumbnail) {  //요청중에 파일이 존재 할시 이전이미지 지운다.
         fs.unlinkSync( uploadDir + '/' + contact.thumbnail );
     }
-    //console.log("리퀘스트바디:::::::"+JSON.stringify(req.file));
+    //console.log("리퀘스트바디:::::::"+JSON.stringify(req.file.filename));
     req.body.thumbnail = (req.file) ? req.file.filename : contact.thumbnail;
+    //sharp(req.file.filename).resize(200,200); // 썸네일 리사이징
     await models.Contacts.update(
             req.body,
         {
