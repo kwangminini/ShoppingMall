@@ -16,6 +16,11 @@ const bodyParser = require('body-parser');
 const db = require('./models');
 const cookieParser = require('cookie-parser');
 
+//flash 메시지 관련
+const flash = require('connect-flash');
+//passport 로그인 관련
+const passport = require('passport');
+const session = require('express-session');
 
 // DB authentication
 db.sequelize.authenticate()
@@ -50,6 +55,21 @@ app.use(cookieParser());
 //업로드 path 추가
 app.use('/uploads', express.static('uploads'));    //static 차이를 알자 , 왼쪽이 url , 오른쪽이 폴더 경로
 
+//session 관련 셋팅
+app.use(session({
+    secret : 'fastcampus',
+    resave: false,
+    saveUninitialized: true,
+    cookie:{
+        maxAge: 2000 * 60 * 60  //지속시간 2시간
+    }
+}));
+//passport 적용
+app.use(passport.initialize());
+app.use(passport.session());
+ 
+//플래시 메시지 관련
+app.use(flash());
 
 
 app.get('/',function(req,res){
