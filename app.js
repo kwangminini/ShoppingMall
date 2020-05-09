@@ -37,6 +37,7 @@ db.sequelize.authenticate()
 const admin = require('./routes/admin');
 const contacts = require('./routes/contacts');
 const accounts = require('./routes/accounts');
+const auth = require('./routes/auth');
 const app = express();
 const port = 3000;
 
@@ -79,6 +80,7 @@ app.get('/',function(req,res){
 app.use('/admin', admin);
 app.use('/contacts', contacts);
 app.use('/accounts',accounts);
+app.use('/auth',auth);
 //app.use(livereloadMiddle());
 
 // app.get('/admin',function(req,res){

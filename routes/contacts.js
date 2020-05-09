@@ -76,7 +76,7 @@ router.get('/edit/:id', csrfProtection, (req,res)=>{
     models.Contacts.findByPk(req.params.id).then((contact)=>{
         res.render('contacts/form.html',{contact:contact, csrfToken:req.csrfToken()});
     });
-});
+}); 
 router.post('/edit/:id',upload.single('thumbnail'),csrfProtection,async(req,res)=>{
     const contact = await models.Contacts.findByPk(req.params.id);
     if(req.file && contact.thumbnail) {  //요청중에 파일이 존재 할시 이전이미지 지운다.
