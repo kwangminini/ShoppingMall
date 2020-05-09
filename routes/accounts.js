@@ -11,10 +11,10 @@ passport.serializeUser((user,done)=>{
     done(null, user);
 })
 passport.deserializeUser((user,done)=>{
-    //const result = user;
-    //result.password="";
+    const result = user;
+    result.password="";
     console.log('deserializeUser');
-    done(null,user);
+    done(null,result);
 })
 
 passport.use(new LocalStrategy({
@@ -29,7 +29,7 @@ passport.use(new LocalStrategy({
                 username,
                 password : passwordHash(password)
             },
-            // attributes : {exclude : ['password']}
+             attributes : {exclude : ['password']}
         });
         //유저에서 조회되지 않을 시
         if(!user){
