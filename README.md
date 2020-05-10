@@ -1,6 +1,5 @@
 # ShoppingMall
-Shopping mall with Node.js 
-
+Shopping mall with Node.js , Bootstrap , MySql 
 ## 뷰엔진 (nunjucks) 
 ```
 npm install nunjucks
