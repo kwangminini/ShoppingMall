@@ -1,7 +1,7 @@
 # ShoppingMall
 Shopping mall with Node.js 
 
-## 뷰 템플릿
+## 뷰엔진 (nunjucks) 
 ```
 npm install nunjucks
 const nunjucks = require('nunjucks');
