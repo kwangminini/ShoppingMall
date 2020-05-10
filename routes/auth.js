@@ -26,11 +26,38 @@ passport.use(new FacebookStrategy({
     async (accessToken, refreshToken, profile, done) =>{
         //아래 하나씩 찍어보면서 데이터를 참고
         //console.log(accessToken);
-        console.log(profile);
+        //console.log(profile);
         //console.log(profile.displayName);
         //console.log(profile.emails[0].value);
         //console.log(profile._raw);
         //console.log(profile._json);
+        try {
+            const username=`fb_${profile.id}`
+            //존재하는지 체크
+            const exist = await models.User.count({
+                where:{
+                    username
+                }
+            });
+          
+            if(!exist){
+                //존재하면 바로 세션에 등록
+                user = await models.User.create({
+                    username,
+                    displayname : profile.displayName,
+                    password : "facebook"
+                });
+            }else{
+                user = await models.User.findOne({
+                    where:{
+                        username
+                    }
+                });
+            }
+            return done(null,user);
+        } catch (e) {
+            console.log(e);
+        }
     }
 ));
 
